@@ -34,4 +34,92 @@ body {
     transform: translateY(-2px) translateX(-2px);
     box-shadow: 4px 4px 0px 0px var(--color-navy);
   }
+
+  .shine-effect {
+    position: relative;
+    overflow: hidden;
+  }
+  .shine-effect::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -150%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to right, transparent, rgba(255,255,255,0.4), transparent);
+    transform: skewX(-20deg);
+    transition: left 0.7s ease;
+    z-index: 20;
+    pointer-events: none;
+  }
+  .shine-effect:hover::after {
+    left: 150%;
+  }
+
+  /* Patterns */
+  .bg-pattern-court {
+    background-image: 
+      linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+  .bg-pattern-court-navy {
+    background-image: 
+      linear-gradient(to right, rgba(25, 27, 36, 0.05) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(25, 27, 36, 0.05) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+  .bg-pattern-dots {
+    background-image: radial-gradient(rgba(255,255,255,0.1) 1.5px, transparent 1.5px);
+    background-size: 24px 24px;
+  }
+  .bg-pattern-diagonal-light {
+    background-image: repeating-linear-gradient(
+      45deg,
+      rgba(25, 27, 36, 0.02) 0,
+      rgba(25, 27, 36, 0.02) 2px,
+      transparent 2px,
+      transparent 10px
+    );
+  }
+  
+  /* Diagonal Clipping */
+  .clip-diagonal {
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 calc(100% - 4vw));
+  }
+  .clip-diagonal-top {
+    clip-path: polygon(0 4vw, 100% 0, 100% 100%, 0 100%);
+  }
+
+  /* Marquee Animation */
+  @keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+  .animate-marquee {
+    animation: marquee 20s linear infinite;
+  }
+
+  /* Duotone Tinting */
+  .duotone-navy {
+    position: relative;
+  }
+  .duotone-navy::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-color: var(--color-navy);
+    mix-blend-mode: multiply;
+    opacity: 0.6;
+    pointer-events: none;
+  }
+  .duotone-navy::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-color: var(--color-electric-blue);
+    mix-blend-mode: color;
+    opacity: 0.4;
+    pointer-events: none;
+  }
 }

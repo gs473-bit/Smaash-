@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { useInView } from 'motion/react';
+import { useInView, motion } from 'motion/react';
 
 export function StatCounter({ target, label, numberColor = "text-electric-blue", labelColor = "text-navy" }: { target: number; label: string; numberColor?: string; labelColor?: string }) {
   const [count, setCount] = useState(0);
   const ref = React.useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const [isFinished, setIsFinished] = useState(false);
 
   useEffect(() => {
     if (isInView) {
@@ -16,6 +17,7 @@ export function StatCounter({ target, label, numberColor = "text-electric-blue",
         current += step;
         if (current >= target) {
           setCount(target);
+          setIsFinished(true);
           clearInterval(timer);
         } else {
           setCount(current);
@@ -27,7 +29,13 @@ export function StatCounter({ target, label, numberColor = "text-electric-blue",
 
   return (
     <div ref={ref} className="flex flex-col">
-      <span className={`font-heading text-4xl md:text-5xl font-black ${numberColor}`}>{count}+</span>
+      <motion.span 
+        animate={isFinished ? { scale: [1, 1.2, 1] } : {}}
+        transition={{ duration: 0.3, ease: "easeOut" }}
+        className={`font-heading text-4xl md:text-5xl font-black origin-left ${numberColor}`}
+      >
+        {count}+
+      </motion.span>
       <span className={`font-sans font-bold uppercase tracking-wider text-sm mt-1 ${labelColor}`}>{label}</span>
     </div>
   );

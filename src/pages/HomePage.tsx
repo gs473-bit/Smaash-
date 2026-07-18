@@ -1,11 +1,14 @@
-import React from 'react';
-import { motion } from 'motion/react';
+import React, { useRef } from 'react';
+import { motion, useScroll, useTransform, useMotionValue, useSpring } from 'motion/react';
 import { MapPin, Trophy, ChevronRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import { programs } from '../data/programs';
 import { centres } from '../data/centres';
 import { StatCounter } from '../components/StatCounter';
+import { Marquee } from '../components/Marquee';
+import { RotatingBanner } from '../components/RotatingBanner';
+import { AnimatedShuttlecock } from '../components/AnimatedShuttlecock';
 
 const FadeIn = ({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) => (
   <motion.div
@@ -20,12 +23,47 @@ const FadeIn = ({ children, delay = 0 }: { children: React.ReactNode; delay?: nu
 
 export function HomePage() {
   const { t } = useLanguage();
+  const heroRef = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: heroRef,
+    offset: ["start start", "end start"]
+  });
+  const y = useTransform(scrollYProgress, [0, 1], ["0%", "20%"]);
+  const scale = useTransform(scrollYProgress, [0, 1], [1, 1.1]);
+
+  // Cursor Tilt Effect for Hero Image
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+  const rotateX = useSpring(useTransform(mouseY, [-0.5, 0.5], [15, -15]), { damping: 20, stiffness: 200 });
+  const rotateY = useSpring(useTransform(mouseX, [-0.5, 0.5], [-15, 15]), { damping: 20, stiffness: 200 });
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width - 0.5;
+    const y = (e.clientY - rect.top) / rect.height - 0.5;
+    mouseX.set(x);
+    mouseY.set(y);
+  };
+  const handleMouseLeave = () => {
+    mouseX.set(0);
+    mouseY.set(0);
+  };
+
+  const bannerMessages = [
+    "Batch starting this week in Pune",
+    "12 new champions this season",
+    "Admissions open for U15 category"
+  ];
+
+  // Staggered Headline
+  const headlineWords = ["Own", "the", "Court."];
 
   return (
     <>
+      <RotatingBanner items={bannerMessages} />
       {/* Hero Section */}
-      <section className="pt-32 pb-20 md:pt-48 md:pb-32 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-8 items-center">
+      <section ref={heroRef} className="pt-32 pb-16 md:pt-48 md:pb-24 px-4 sm:px-6 lg:px-8 bg-pattern-diagonal-light relative overflow-hidden">
+        <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 lg:gap-8 items-center relative z-10">
           <motion.div 
             initial={{ opacity: 0, x: -30 }}
             animate={{ opacity: 1, x: 0 }}
@@ -34,9 +72,26 @@ export function HomePage() {
             <div className="inline-block bg-vivid-teal text-navy font-bold px-3 py-1 rounded-full text-xs uppercase tracking-wider mb-6 border border-navy">
               Maharashtra's #1 Badminton Academy
             </div>
-            <h1 className="font-heading font-black text-6xl md:text-8xl leading-[0.9] tracking-tighter mb-6 uppercase">
-              Own the <br />
-              <span className="text-electric-blue">Court.</span>
+            <h1 className="font-heading font-black text-6xl md:text-8xl leading-[0.9] tracking-tighter mb-6 uppercase flex flex-wrap gap-x-4">
+              {headlineWords.map((word, i) => (
+                <motion.span
+                  key={i}
+                  initial={{ opacity: 0, y: 50 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: i * 0.15 + 0.2 }}
+                  className={i === 2 ? "text-electric-blue relative inline-block" : "inline-block"}
+                >
+                  {word}
+                  {i === 2 && (
+                    <motion.div 
+                      initial={{ scaleX: 0 }}
+                      animate={{ scaleX: 1 }}
+                      transition={{ delay: 0.8, duration: 0.6, ease: "easeOut" }}
+                      className="absolute -bottom-2 left-0 w-full h-3 bg-shuttle-lime origin-left -z-10"
+                    />
+                  )}
+                </motion.span>
+              ))}
             </h1>
             <p className="text-lg md:text-xl mb-10 max-w-md font-medium text-navy/80">
               Elite coaching. Pro facilities. We build champions from the ground up. Stop playing, start dominating.
@@ -57,17 +112,23 @@ export function HomePage() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
             className="relative"
+            onMouseMove={handleMouseMove}
+            onMouseLeave={handleMouseLeave}
+            style={{ rotateX, rotateY, transformPerspective: 1200 }}
           >
-            <div className="aspect-[4/3] bg-electric-blue rounded-xl border-2 border-navy hard-shadow overflow-hidden relative">
-              <img 
-                src="https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?q=80&w=2070&auto=format&fit=crop" 
-                alt="Badminton player smashing" 
-                className="w-full h-full object-cover mix-blend-overlay opacity-80"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-electric-blue/80 to-transparent"></div>
+            <div className="aspect-[4/3] bg-electric-blue rounded-xl border-2 border-navy hard-shadow overflow-hidden relative duotone-navy pointer-events-none">
+              <motion.video 
+                style={{ y, scale }}
+                autoPlay loop muted playsInline
+                poster="https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?q=80&w=2070&auto=format&fit=crop" 
+                className="w-full h-full object-cover origin-top"
+              >
+                {/* When real footage is available, add <source src="..." type="video/mp4" /> here */}
+              </motion.video>
               
-              <div className="absolute bottom-6 left-6 right-6 flex justify-between items-end">
-                <div className="bg-white px-4 py-2 rounded-lg border border-navy hard-shadow">
+              <div className="absolute bottom-6 left-6 right-6 flex justify-between items-end z-10 pointer-events-auto">
+                <div className="bg-white px-4 py-2 rounded-lg border border-navy hard-shadow relative">
+                  <div className="absolute -top-3 -right-3 w-6 h-6 bg-shuttle-lime rounded-full border border-navy"></div>
                   <div className="font-heading font-black text-2xl">200+</div>
                   <div className="text-xs font-bold uppercase tracking-wider">Active Players</div>
                 </div>
@@ -82,7 +143,7 @@ export function HomePage() {
         </div>
         
         {/* Stats Row */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 pt-20 border-t border-navy-10 mt-20">
+        <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 pt-20 border-t border-navy-10 mt-20 relative z-10">
           <StatCounter target={12} label="Centers in MH" />
           <StatCounter target={50} label="Pro Coaches" />
           <StatCounter target={500} label="Tournaments Won" />
@@ -90,10 +151,12 @@ export function HomePage() {
         </div>
       </section>
 
+      <Marquee text="12+ Centres • 3,000+ Students • 400+ Tournament Wins • Never Stop Moving" />
+
       {/* Programs Section */}
-      <section id="programs" className="py-24 bg-electric-blue text-white relative">
-        <div className="absolute top-0 left-0 w-full h-4 bg-shuttle-lime border-b border-navy"></div>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section id="programs" className="py-28 bg-electric-blue text-white relative clip-diagonal-top bg-pattern-court -mt-4">
+        <div className="absolute top-0 left-0 w-full h-2 bg-shuttle-lime"></div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
           <FadeIn>
             <h2 className="font-heading font-black text-5xl md:text-6xl mb-4 uppercase tracking-tight">Pick Your Path</h2>
             <p className="text-xl mb-16 max-w-2xl text-blue-100 font-medium">Programs designed for every level. We push you to your absolute limit.</p>
@@ -103,7 +166,7 @@ export function HomePage() {
             {programs.map((program, idx) => (
               <React.Fragment key={program.id}>
                 <FadeIn delay={0.1 * (idx + 1)}>
-                <div className={`rounded-xl p-8 border-2 hard-shadow hover-lift h-full flex flex-col relative overflow-hidden ${
+                <div className={`rounded-xl p-8 border-2 hard-shadow hover-lift shine-effect h-full flex flex-col relative overflow-hidden ${
                   idx === 0 ? 'bg-white text-navy border-navy' : 
                   idx === 1 ? 'bg-white text-navy border-navy' : 
                   'bg-navy text-white border-white/20 shadow-none hard-shadow-blue'
@@ -149,11 +212,20 @@ export function HomePage() {
       </section>
 
       {/* Centers Section */}
-      <section id="centers" className="py-24 bg-bg-light">
+      <section id="centers" className="py-24 bg-bg-light relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
             <FadeIn>
-              <h2 className="font-heading font-black text-5xl md:text-6xl uppercase tracking-tight">Our Arenas</h2>
+              <h2 className="font-heading font-black text-5xl md:text-6xl uppercase tracking-tight relative inline-block">
+                Our Arenas
+                <motion.div 
+                  initial={{ scaleX: 0 }}
+                  whileInView={{ scaleX: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.3, duration: 0.6, ease: "easeOut" }}
+                  className="absolute -bottom-2 left-0 w-full h-2 bg-vivid-teal origin-left -z-10"
+                />
+              </h2>
               <p className="text-xl mt-4 font-medium max-w-xl text-navy/80">World-class BWF approved synthetic mats. Brilliant lighting. Pure focus.</p>
             </FadeIn>
             <FadeIn delay={0.2}>
@@ -168,12 +240,12 @@ export function HomePage() {
             {centres.slice(0, 2).map((centre, idx) => (
               <React.Fragment key={centre.id}>
                 <FadeIn delay={0.1 * (idx + 1)}>
-                <div className="group bg-white rounded-xl border border-navy-10 overflow-hidden hover:border-navy transition-colors flex flex-col sm:flex-row">
-                  <div className="sm:w-2/5 h-48 sm:h-auto bg-gray-200 relative">
+                <div className="group bg-white rounded-xl border border-navy-10 overflow-hidden hover:border-navy transition-colors flex flex-col sm:flex-row h-full">
+                  <div className="sm:w-2/5 h-48 sm:h-auto bg-gray-200 relative overflow-hidden duotone-navy">
                     <img 
                       src={idx === 0 ? "https://images.unsplash.com/photo-1622279457486-62dcc4a431d6?q=80&w=2070&auto=format&fit=crop" : "https://images.unsplash.com/photo-1579691851221-3e4b77f805a5?q=80&w=2070&auto=format&fit=crop"} 
                       alt="Center" 
-                      className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500" 
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" 
                     />
                   </div>
                   <div className="p-6 sm:w-3/5 flex flex-col justify-center">
@@ -203,8 +275,9 @@ export function HomePage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-24 bg-shuttle-lime border-t-2 border-b-2 border-navy">
-        <div className="max-w-4xl mx-auto px-4 text-center">
+      <section className="py-24 bg-shuttle-lime border-t-2 border-navy clip-diagonal bg-pattern-dots pb-32 relative overflow-hidden">
+        <AnimatedShuttlecock />
+        <div className="max-w-4xl mx-auto px-4 text-center mt-12 relative z-10">
           <h2 className="font-heading font-black text-5xl md:text-7xl uppercase tracking-tighter mb-6 text-navy">Ready to Sweat?</h2>
           <p className="text-xl md:text-2xl font-bold mb-10 text-navy/80">Book your first trial session. Bring your racket. We'll bring the heat.</p>
           <Link to="/book-trial" className="inline-block bg-navy text-white font-bold py-5 px-10 rounded-lg hard-shadow hover-lift border border-navy uppercase tracking-widest text-lg md:text-xl">

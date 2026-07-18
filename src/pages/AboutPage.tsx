@@ -88,10 +88,10 @@ export function AboutPage() {
             </p>
           </motion.div>
           <motion.div initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.6, delay: 0.2 }} className="relative">
-            <div className="aspect-square md:aspect-[4/5] rounded-xl border-2 border-navy hard-shadow overflow-hidden relative bg-electric-blue">
-              <img src="https://images.unsplash.com/photo-1599566150163-29194dcaad36?q=80&w=1000&auto=format&fit=crop" alt="Founder" className="w-full h-full object-cover mix-blend-overlay opacity-90 grayscale" />
-              <div className="absolute inset-0 bg-gradient-to-t from-navy/90 via-navy/20 to-transparent"></div>
-              <div className="absolute bottom-6 left-6 right-6">
+            <div className="aspect-square md:aspect-[4/5] rounded-xl border-2 border-navy hard-shadow overflow-hidden relative bg-electric-blue duotone-navy">
+              <img src="https://images.unsplash.com/photo-1599566150163-29194dcaad36?q=80&w=1000&auto=format&fit=crop" alt="Founder" className="w-full h-full object-cover grayscale" />
+              <div className="absolute inset-0 bg-gradient-to-t from-navy/90 via-navy/20 to-transparent z-10"></div>
+              <div className="absolute bottom-6 left-6 right-6 z-10">
                 <div className="bg-shuttle-lime text-navy px-4 py-3 rounded-lg border border-navy hard-shadow inline-block">
                   <div className="font-bold text-sm md:text-base uppercase tracking-wider flex items-center gap-2">
                     <Trophy className="w-5 h-5 shrink-0" /> {t(aboutData.founderTag)}
@@ -179,8 +179,8 @@ export function AboutPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-24 bg-shuttle-lime border-t-2 border-b-2 border-navy">
-        <div className="max-w-4xl mx-auto px-4 text-center">
+      <section className="py-24 bg-shuttle-lime border-t-2 border-navy clip-diagonal bg-pattern-dots pb-32">
+        <div className="max-w-4xl mx-auto px-4 text-center mt-12 relative z-10">
           <h2 className="font-heading font-black text-5xl md:text-7xl uppercase tracking-tighter mb-6 text-navy">{t(aboutData.ctaTitle)}</h2>
           <p className="text-xl md:text-2xl font-bold mb-10 text-navy/80">{t(aboutData.ctaDesc)}</p>
           <Link to="/book-trial" className="inline-block bg-navy text-white font-bold py-5 px-10 rounded-lg hard-shadow hover-lift border border-navy uppercase tracking-widest text-lg md:text-xl">

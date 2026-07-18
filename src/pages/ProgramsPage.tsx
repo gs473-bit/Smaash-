@@ -128,13 +128,13 @@ export function ProgramsPage() {
               
               {/* Image Side */}
               <FadeIn delay={0.1} className={idx % 2 !== 0 ? 'lg:col-start-2' : ''}>
-                <div className="relative aspect-[4/3] rounded-xl border-2 border-navy hard-shadow overflow-hidden bg-electric-blue">
+                <div className="relative aspect-[4/3] rounded-xl border-2 border-navy hard-shadow overflow-hidden bg-electric-blue duotone-navy">
                   <img 
                     src={program.image} 
                     alt={t(program.name)}
-                    className="w-full h-full object-cover mix-blend-overlay opacity-90 grayscale"
+                    className="w-full h-full object-cover grayscale"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-navy/80 via-transparent to-transparent"></div>
+                  <div className="absolute inset-0 bg-gradient-to-t from-navy/80 via-transparent to-transparent z-10"></div>
                   
                   {program.category === 'High-Performance' && (
                     <div className="absolute top-4 left-4 bg-coral-red text-white font-bold px-4 py-2 rounded uppercase tracking-wider text-sm flex items-center gap-2 border-2 border-navy hard-shadow z-10">
@@ -143,7 +143,7 @@ export function ProgramsPage() {
                     </div>
                   )}
                   
-                  <div className="absolute bottom-6 left-6 right-6">
+                  <div className="absolute bottom-6 left-6 right-6 z-10">
                     <h2 className="font-heading font-black text-4xl text-white uppercase tracking-tight drop-shadow-md">
                       {t(program.name)}
                     </h2>

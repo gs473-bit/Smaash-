@@ -188,15 +188,15 @@ export function CentresPage() {
                 className="scroll-mt-40"
               >
                 <FadeIn delay={0.1 * (idx % 2 + 1)} className="h-full">
-                  <div className={`bg-white rounded-xl border-2 border-navy hard-shadow overflow-hidden flex flex-col h-full transition-transform duration-300 ${activeCentre === centre.id ? '-translate-y-2' : ''}`}>
+                  <div className={`bg-white rounded-xl border-2 border-navy hard-shadow hover-lift shine-effect overflow-hidden flex flex-col h-full transition-transform duration-300 ${activeCentre === centre.id ? '-translate-y-2' : ''}`}>
                     {/* Photos Strip */}
                     <div className="grid grid-cols-3 gap-1 h-32 md:h-40 bg-navy p-1">
                       {pageData.placeholderPhotos.map((photo, i) => (
-                        <div key={i} className="relative overflow-hidden group">
+                        <div key={i} className="relative overflow-hidden group duotone-navy">
                           <img 
                             src={photo} 
                             alt={`${t(centre.name)} photo ${i + 1}`}
-                            className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-500"
+                            className="w-full h-full object-cover transition-all duration-500 group-hover:scale-110"
                           />
                         </div>
                       ))}
@@ -284,8 +284,8 @@ export function CentresPage() {
         </section>
 
         {/* CTA Section */}
-        <section className="py-24 bg-shuttle-lime border-t-2 border-navy">
-          <div className="max-w-4xl mx-auto px-4 text-center">
+        <section className="py-24 bg-shuttle-lime border-t-2 border-navy clip-diagonal bg-pattern-dots pb-32">
+          <div className="max-w-4xl mx-auto px-4 text-center mt-12 relative z-10">
             <h2 className="font-heading font-black text-5xl md:text-6xl uppercase tracking-tighter mb-4 text-navy">{t(pageData.labels.ctaTitle)}</h2>
             <p className="text-xl md:text-2xl font-bold mb-10 text-navy/80">{t(pageData.labels.ctaDesc)}</p>
             <Link 

@@ -19,6 +19,7 @@ import { BookTrialPage } from './pages/BookTrialPage';
 import { PlaceholderPage } from './pages/PlaceholderPage';
 import { LanguageProvider } from './context/LanguageContext';
 import { MessageCircle } from 'lucide-react';
+import { ScrollProgress } from './components/ScrollProgress';
 
 export default function App() {
   const waLink = "https://wa.me/919876543210?text=Hi,%20I%20just%20sent%20an%20enquiry%20on%20your%20website.";
@@ -26,6 +27,7 @@ export default function App() {
   return (
     <LanguageProvider>
       <Router>
+        <ScrollProgress />
         <div className="min-h-screen font-sans bg-bg-light text-navy overflow-x-hidden selection:bg-shuttle-lime selection:text-navy flex flex-col relative">
           <Nav />
           

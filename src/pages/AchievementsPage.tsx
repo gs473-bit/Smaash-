@@ -158,7 +158,26 @@ export function AchievementsPage() {
             {filteredAchievements.map((ach, idx) => (
               <React.Fragment key={ach.id}>
                 <FadeIn delay={0.1 * (idx % 3)}>
-                  <div className="bg-white rounded-xl border-2 border-navy hard-shadow hover-lift overflow-hidden h-full flex flex-col relative group">
+                  <div className="bg-white rounded-xl border-2 border-navy hard-shadow hover-lift shine-effect overflow-hidden h-full flex flex-col relative group" onMouseEnter={() => {
+                    if (ach.badgeType === 'Gold') {
+                      import('canvas-confetti').then((confetti) => {
+                        const rect = (window.event?.target as HTMLElement)?.getBoundingClientRect();
+                        if (rect) {
+                          confetti.default({
+                            particleCount: 50,
+                            spread: 60,
+                            origin: {
+                              x: (rect.left + rect.width / 2) / window.innerWidth,
+                              y: (rect.top + rect.height / 2) / window.innerHeight
+                            },
+                            colors: ['#C6FF00', '#00E0B8', '#FF1F4E']
+                          });
+                        } else {
+                          confetti.default({ particleCount: 50, spread: 60, colors: ['#C6FF00', '#00E0B8', '#FF1F4E'] });
+                        }
+                      }).catch(() => {});
+                    }
+                  }}>
                   <div className="h-56 w-full relative bg-gray-200 overflow-hidden border-b-2 border-navy">
                     <img 
                       src={ach.photo} 

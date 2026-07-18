@@ -54,13 +54,13 @@ export function CoachesPage() {
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-24">
           <FadeIn>
             <div className="bg-electric-blue rounded-xl border-2 border-navy hard-shadow overflow-hidden flex flex-col md:flex-row text-white">
-              <div className="md:w-2/5 relative h-64 md:h-auto">
+              <div className="md:w-2/5 relative h-64 md:h-auto duotone-navy">
                 <img 
                   src={headCoach.photo} 
                   alt={t(headCoach.name)} 
-                  className="w-full h-full object-cover mix-blend-overlay opacity-90 grayscale"
+                  className="w-full h-full object-cover grayscale"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-navy/60 to-transparent md:bg-gradient-to-r"></div>
+                <div className="absolute inset-0 bg-gradient-to-t from-navy/60 to-transparent md:bg-gradient-to-r z-10"></div>
               </div>
               <div className="md:w-3/5 p-8 md:p-12 flex flex-col justify-center">
                 <div className="flex items-center gap-3 mb-4 text-shuttle-lime font-bold uppercase tracking-widest text-sm">
@@ -91,13 +91,13 @@ export function CoachesPage() {
           {regularCoaches.map((coach, idx) => (
             <React.Fragment key={coach.id}>
               <FadeIn delay={0.1 * (idx + 1)}>
-                <div className="group bg-white rounded-xl border-2 border-navy hard-shadow hover-lift overflow-hidden flex flex-col h-full relative cursor-pointer">
+                <div className="group bg-white rounded-xl border-2 border-navy hard-shadow hover-lift shine-effect overflow-hidden flex flex-col h-full relative cursor-pointer">
                   {/* Photo Section */}
-                  <div className="h-64 sm:h-72 w-full relative bg-gray-200 overflow-hidden border-b-2 border-navy">
+                  <div className="h-64 sm:h-72 w-full relative bg-gray-200 overflow-hidden border-b-2 border-navy duotone-navy">
                     <img 
                       src={coach.photo} 
                       alt={t(coach.name)}
-                      className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
+                      className="w-full h-full object-cover grayscale transition-all duration-500"
                     />
                     {/* Specialization Badge */}
                     <div className="absolute top-4 right-4 z-10">
@@ -137,8 +137,8 @@ export function CoachesPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-24 bg-shuttle-lime border-t-2 border-navy">
-        <div className="max-w-4xl mx-auto px-4 text-center">
+      <section className="py-24 bg-shuttle-lime border-t-2 border-navy clip-diagonal bg-pattern-dots pb-32">
+        <div className="max-w-4xl mx-auto px-4 text-center mt-12 relative z-10">
           <h2 className="font-heading font-black text-5xl md:text-7xl uppercase tracking-tighter mb-6 text-navy">{t(pageData.ctaTitle)}</h2>
           <p className="text-xl md:text-2xl font-bold mb-10 text-navy/80">{t(pageData.ctaDesc)}</p>
           <Link 
