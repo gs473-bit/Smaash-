@@ -1,0 +1,6 @@
+{
+  "name": "SmashPoint",
+  "description": "Multi-centre badminton coaching academy website with punchy design.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
